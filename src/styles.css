@@ -62,9 +62,17 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --radius: 0.25rem;
+  /* Vellum Survey palette */
+  --vellum: oklch(0.957 0.018 85);
+  --vellum-deep: oklch(0.92 0.022 85);
+  --ink: oklch(0.22 0.012 60);
+  --clay: oklch(0.55 0.04 60);
+  --elevation: oklch(0.84 0.018 80);
+  --rust: oklch(0.55 0.13 45);
+
+  --background: var(--vellum);
+  --foreground: var(--ink);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
@@ -141,4 +149,35 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+@theme inline {
+  --color-vellum: var(--vellum);
+  --color-vellum-deep: var(--vellum-deep);
+  --color-ink: var(--ink);
+  --color-clay: var(--clay);
+  --color-elevation: var(--elevation);
+  --color-rust: var(--rust);
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-serif);
+    background: var(--vellum);
+    color: var(--ink);
+  }
+  .font-mono { font-family: var(--font-mono); }
+}
+
+.survey-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--ink) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--ink) 8%, transparent) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+.paper-grain {
+  background-image: radial-gradient(color-mix(in oklab, var(--ink) 6%, transparent) 1px, transparent 1px);
+  background-size: 3px 3px;
 }
