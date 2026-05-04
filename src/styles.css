@@ -62,9 +62,17 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --radius: 0.25rem;
+  /* Vellum Survey palette */
+  --vellum: oklch(0.957 0.018 85);
+  --vellum-deep: oklch(0.92 0.022 85);
+  --ink: oklch(0.22 0.012 60);
+  --clay: oklch(0.55 0.04 60);
+  --elevation: oklch(0.84 0.018 80);
+  --rust: oklch(0.55 0.13 45);
+
+  --background: var(--vellum);
+  --foreground: var(--ink);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
