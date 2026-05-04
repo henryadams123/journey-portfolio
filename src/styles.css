@@ -150,3 +150,34 @@
     color: var(--color-foreground);
   }
 }
+
+@theme inline {
+  --color-vellum: var(--vellum);
+  --color-vellum-deep: var(--vellum-deep);
+  --color-ink: var(--ink);
+  --color-clay: var(--clay);
+  --color-elevation: var(--elevation);
+  --color-rust: var(--rust);
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-serif);
+    background: var(--vellum);
+    color: var(--ink);
+  }
+  .font-mono { font-family: var(--font-mono); }
+}
+
+.survey-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--ink) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--ink) 8%, transparent) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+.paper-grain {
+  background-image: radial-gradient(color-mix(in oklab, var(--ink) 6%, transparent) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
