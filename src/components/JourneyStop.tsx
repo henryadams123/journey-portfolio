@@ -79,6 +79,16 @@ export function JourneyStop({ stop, idx }: { stop: Stop; idx: number }) {
     };
   }, [mx, my, reduce]);
 
+  // Combine camera + mouse rotations (hooks must be unconditional)
+  const totalRotX = useTransform<number, number>(
+    [camRotX, mouseRotX],
+    ([a, b]) => (reduce ? 0 : a + b)
+  );
+  const totalRotY = useTransform<number, number>(
+    [camRotY, mouseRotY],
+    ([a, b]) => (reduce ? 0 : a + b)
+  );
+
   const flip = idx % 2 === 1;
 
   return (
@@ -96,8 +106,8 @@ export function JourneyStop({ stop, idx }: { stop: Stop; idx: number }) {
         <motion.div
           style={{
             opacity: sceneOpacity,
-            rotateX: reduce ? 0 : (useTransform([camRotX, mouseRotX] as MotionValue<number>[], ([a, b]: number[]) => a + b) as MotionValue<number>),
-            rotateY: reduce ? 0 : (useTransform([camRotY, mouseRotY] as MotionValue<number>[], ([a, b]: number[]) => a + b) as MotionValue<number>),
+            rotateX: totalRotX,
+            rotateY: totalRotY,
             z: camZ,
             transformStyle: reduce ? undefined : "preserve-3d",
             willChange: reduce ? undefined : "transform, opacity",
