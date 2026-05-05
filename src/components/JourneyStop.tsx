@@ -18,25 +18,22 @@ export function JourneyStop({ stop, idx }: { stop: Stop; idx: number }) {
 
   const p = useSmooth(scrollYProgress, reduce);
 
-  // Static fallbacks when user prefers reduced motion
-  const y = reduce ? 0 : useTransform(p, [0, 1], ["12%", "-12%"]);
-  const scale = reduce ? 1 : useTransform(p, [0, 0.5, 1], [1.08, 1, 1.08]);
-  const rotateZ = reduce ? 0 : useTransform(
+  // All hooks called unconditionally; pass-through when reduce is true
+  const yMv = useTransform(p, [0, 1], reduce ? ["0%", "0%"] : ["12%", "-12%"]);
+  const scaleMv = useTransform(p, [0, 0.5, 1], reduce ? [1, 1, 1] : [1.08, 1, 1.08]);
+  const rotateZMv = useTransform(
     p,
     [0, 1],
-    [idx % 2 === 0 ? -1.6 : 1.6, idx % 2 === 0 ? 1.6 : -1.6]
+    reduce ? [0, 0] : [idx % 2 === 0 ? -1.6 : 1.6, idx % 2 === 0 ? 1.6 : -1.6]
   );
-  // 3D camera: subtle tilt + depth pop as the section moves through the viewport
-  const rotateY = reduce ? 0 : useTransform(p, [0, 0.5, 1], [idx % 2 === 0 ? 8 : -8, 0, idx % 2 === 0 ? -8 : 8]);
-  const rotateX = reduce ? 0 : useTransform(p, [0, 0.5, 1], [6, 0, -6]);
-  const z = reduce ? 0 : useTransform(p, [0, 0.5, 1], [-120, 0, -120]);
+  const rotateYMv = useTransform(p, [0, 0.5, 1], reduce ? [0, 0, 0] : [idx % 2 === 0 ? 8 : -8, 0, idx % 2 === 0 ? -8 : 8]);
+  const rotateXMv = useTransform(p, [0, 0.5, 1], reduce ? [0, 0, 0] : [6, 0, -6]);
+  const zMv = useTransform(p, [0, 0.5, 1], reduce ? [0, 0, 0] : [-120, 0, -120]);
 
-  const textY = reduce ? 0 : useTransform(p, [0, 1], ["28%", "-28%"]);
-  const textOpacity = reduce ? 1 : useTransform(p, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-  const captionX = reduce ? 0 : useTransform(p, [0, 1], [idx % 2 === 0 ? -20 : 20, 0]);
-
-  // Page-curl-style image reveal
-  const imgOpacity = reduce ? 1 : useTransform(p, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+  const textYMv = useTransform(p, [0, 1], reduce ? ["0%", "0%"] : ["28%", "-28%"]);
+  const textOpacityMv = useTransform(p, [0, 0.2, 0.8, 1], reduce ? [1, 1, 1, 1] : [0, 1, 1, 0]);
+  const captionXMv = useTransform(p, [0, 1], reduce ? [0, 0] : [idx % 2 === 0 ? -20 : 20, 0]);
+  const imgOpacityMv = useTransform(p, [0, 0.15, 0.85, 1], reduce ? [1, 1, 1, 1] : [0, 1, 1, 0]);
 
   const flip = idx % 2 === 1;
 
