@@ -47,13 +47,13 @@ export function JourneyStop({ stop, idx }: { stop: Stop; idx: number }) {
       {/* Image column */}
       <motion.div
         style={{
-          y,
-          rotateZ,
-          rotateY,
-          rotateX,
-          z,
+          y: yMv,
+          rotateZ: rotateZMv,
+          rotateY: rotateYMv,
+          rotateX: rotateXMv,
+          z: zMv,
           transformStyle: reduce ? undefined : "preserve-3d",
-          opacity: imgOpacity,
+          opacity: imgOpacityMv,
           willChange: reduce ? undefined : "transform, opacity",
         }}
         className={`col-span-12 md:col-span-7 ${flip ? "md:order-2" : ""}`}
@@ -63,7 +63,7 @@ export function JourneyStop({ stop, idx }: { stop: Stop; idx: number }) {
             FIG. {stop.index} — {stop.place}
           </div>
           <motion.div
-            style={{ scale }}
+            style={{ scale: scaleMv }}
             className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden border border-ink/15 shadow-[0_30px_60px_-30px_rgba(45,45,42,0.45)]"
           >
             <img
@@ -85,7 +85,7 @@ export function JourneyStop({ stop, idx }: { stop: Stop; idx: number }) {
 
       {/* Text column */}
       <motion.div
-        style={{ y: textY, opacity: textOpacity, x: captionX }}
+        style={{ y: textYMv, opacity: textOpacityMv, x: captionXMv }}
         className={`col-span-12 md:col-span-5 ${flip ? "md:order-1" : ""} space-y-6`}
       >
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-clay">
