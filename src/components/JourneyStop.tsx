@@ -1,23 +1,42 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, useSpring, useReducedMotion, type MotionValue } from "motion/react";
 import type { Stop } from "@/lib/journey";
+
+// Smooths a scroll motion value with a spring for buttery 3D camera feel
+function useSmooth(value: MotionValue<number>, reduce: boolean) {
+  return useSpring(value, reduce ? { duration: 0 } : { stiffness: 80, damping: 24, mass: 0.6 });
+}
 
 export function JourneyStop({ stop, idx }: { stop: Stop; idx: number }) {
   const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion() ?? false;
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.05, 1, 1.05]);
-  const rotate = useTransform(
-    scrollYProgress,
+  const p = useSmooth(scrollYProgress, reduce);
+
+  // Static fallbacks when user prefers reduced motion
+  const y = reduce ? 0 : useTransform(p, [0, 1], ["12%", "-12%"]);
+  const scale = reduce ? 1 : useTransform(p, [0, 0.5, 1], [1.08, 1, 1.08]);
+  const rotateZ = reduce ? 0 : useTransform(
+    p,
     [0, 1],
-    [idx % 2 === 0 ? -1.2 : 1.2, idx % 2 === 0 ? 1.2 : -1.2]
+    [idx % 2 === 0 ? -1.6 : 1.6, idx % 2 === 0 ? 1.6 : -1.6]
   );
-  const textY = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 0]);
+  // 3D camera: subtle tilt + depth pop as the section moves through the viewport
+  const rotateY = reduce ? 0 : useTransform(p, [0, 0.5, 1], [idx % 2 === 0 ? 8 : -8, 0, idx % 2 === 0 ? -8 : 8]);
+  const rotateX = reduce ? 0 : useTransform(p, [0, 0.5, 1], [6, 0, -6]);
+  const z = reduce ? 0 : useTransform(p, [0, 0.5, 1], [-120, 0, -120]);
+
+  const textY = reduce ? 0 : useTransform(p, [0, 1], ["28%", "-28%"]);
+  const textOpacity = reduce ? 1 : useTransform(p, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const captionX = reduce ? 0 : useTransform(p, [0, 1], [idx % 2 === 0 ? -20 : 20, 0]);
+
+  // Page-curl-style image reveal
+  const imgOpacity = reduce ? 1 : useTransform(p, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
 
   const flip = idx % 2 === 1;
 
@@ -25,10 +44,21 @@ export function JourneyStop({ stop, idx }: { stop: Stop; idx: number }) {
     <section
       ref={ref}
       className="relative min-h-[110vh] grid grid-cols-12 gap-4 md:gap-8 px-6 md:px-12 py-32 items-center"
+      style={{ perspective: reduce ? undefined : 1400, perspectiveOrigin: "50% 50%" }}
+      aria-label={`Station ${stop.index} — ${stop.place}`}
     >
       {/* Image column */}
       <motion.div
-        style={{ y, rotate }}
+        style={{
+          y,
+          rotateZ,
+          rotateY,
+          rotateX,
+          z,
+          transformStyle: reduce ? undefined : "preserve-3d",
+          opacity: imgOpacity,
+          willChange: reduce ? undefined : "transform, opacity",
+        }}
         className={`col-span-12 md:col-span-7 ${flip ? "md:order-2" : ""}`}
       >
         <div className="relative">
@@ -37,7 +67,7 @@ export function JourneyStop({ stop, idx }: { stop: Stop; idx: number }) {
           </div>
           <motion.div
             style={{ scale }}
-            className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden border border-ink/15 shadow-[0_30px_60px_-30px_rgba(45,45,42,0.35)]"
+            className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden border border-ink/15 shadow-[0_30px_60px_-30px_rgba(45,45,42,0.45)]"
           >
             <img
               src={stop.image}
@@ -58,7 +88,7 @@ export function JourneyStop({ stop, idx }: { stop: Stop; idx: number }) {
 
       {/* Text column */}
       <motion.div
-        style={{ y: textY, opacity }}
+        style={{ y: textY, opacity: textOpacity, x: captionX }}
         className={`col-span-12 md:col-span-5 ${flip ? "md:order-1" : ""} space-y-6`}
       >
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-clay">
