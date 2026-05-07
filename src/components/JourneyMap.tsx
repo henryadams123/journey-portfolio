@@ -1,6 +1,27 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
-import { STOPS } from "@/lib/journey";
+import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { STOPS, type Stop } from "@/lib/journey";
+
+function Station({ stop, i, activeIdx }: { stop: Stop; i: number; activeIdx: MotionValue<number> }) {
+  const p = POS[stop.id];
+  const opacity = useTransform(activeIdx, (v) => (v >= i - 0.4 ? 1 : 0.25));
+  const scale = useTransform(activeIdx, (v) => (Math.abs(v - i) < 0.6 ? 1.4 : 1));
+  if (!p) return null;
+  return (
+    <g>
+      <motion.circle cx={p.x} cy={p.y} r={3} fill="var(--rust)" style={{ opacity, scale, transformOrigin: `${p.x}px ${p.y}px` }} />
+      <circle cx={p.x} cy={p.y} r={6} fill="none" stroke="var(--rust)" strokeOpacity="0.3" strokeWidth="0.5" />
+      <text
+        x={p.x + 10}
+        y={p.y + 3}
+        className="fill-current text-ink"
+        style={{ font: "8px 'IBM Plex Mono', monospace", letterSpacing: "0.1em" }}
+      >
+        {stop.index} · {stop.place.split(",")[0].toUpperCase()}
+      </text>
+    </g>
+  );
+}
 
 /**
  * Interactive topographic SVG map. Stylized — Colorado Front Range ↔ Sydney ↔ back.
@@ -95,26 +116,9 @@ export function JourneyMap() {
             <path d={path} fill="none" stroke="currentColor" strokeOpacity="0.15" strokeWidth="0.6" strokeDasharray="2 4" className="text-ink" />
 
             {/* stations */}
-            {STOPS.map((s, i) => {
-              const p = POS[s.id];
-              if (!p) return null;
-              const opacity = useTransform(activeIdx, (v) => (v >= i - 0.4 ? 1 : 0.25));
-              const scale = useTransform(activeIdx, (v) => (Math.abs(v - i) < 0.6 ? 1.4 : 1));
-              return (
-                <g key={s.id}>
-                  <motion.circle cx={p.x} cy={p.y} r={3} fill="var(--rust)" style={{ opacity, scale }} className="origin-center" />
-                  <circle cx={p.x} cy={p.y} r={6} fill="none" stroke="var(--rust)" strokeOpacity="0.3" strokeWidth="0.5" />
-                  <text
-                    x={p.x + 10}
-                    y={p.y + 3}
-                    className="fill-current text-ink"
-                    style={{ font: "8px 'IBM Plex Mono', monospace", letterSpacing: "0.1em" }}
-                  >
-                    {s.index} · {s.place.split(",")[0].toUpperCase()}
-                  </text>
-                </g>
-              );
-            })}
+            {STOPS.map((s, i) => (
+              <Station key={s.id} stop={s} i={i} activeIdx={activeIdx} />
+            ))}
           </svg>
 
           {/* corner annotations */}
