@@ -3,6 +3,10 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { SiteNav, SiteFooter } from "@/components/SiteNav";
 import { JourneyStop } from "@/components/JourneyStop";
+import { HeroTopo } from "@/components/HeroTopo";
+import { JourneyMap } from "@/components/JourneyMap";
+import { Pursuits } from "@/components/Pursuits";
+import { Magnetic } from "@/components/Magnetic";
 import { STOPS, PROJECTS } from "@/lib/journey";
 
 export const Route = createFileRoute("/")({
@@ -38,9 +42,10 @@ function Index() {
       <motion.section
         ref={heroRef}
         style={{ opacity: heroFade }}
-        className="relative pt-32 md:pt-40 pb-20 px-6 md:px-12 z-10"
+        className="relative pt-32 md:pt-40 pb-20 px-6 md:px-12 z-10 overflow-hidden"
       >
-        <div className="max-w-screen-2xl mx-auto">
+        <HeroTopo />
+        <div className="max-w-screen-2xl mx-auto relative">
           <div className="flex justify-between items-end mb-12 font-mono text-[10px] uppercase tracking-widest text-clay">
             <div>Station: Primary_Relief</div>
             <div className="text-right">
@@ -104,17 +109,22 @@ function Index() {
         ))}
       </div>
 
+      <JourneyMap />
+      <Pursuits />
+
       {/* Archive preview */}
       <section className="relative z-10 px-6 md:px-12 py-32 border-t border-ink/10">
         <div className="max-w-screen-2xl mx-auto">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <div className="font-mono text-[10px] uppercase tracking-widest text-clay mb-3">Sub-survey 02</div>
+              <div className="font-mono text-[10px] uppercase tracking-widest text-clay mb-3">Sub-survey 05</div>
               <h2 className="font-serif text-5xl md:text-7xl tracking-tighter">The Archive</h2>
             </div>
-            <Link to="/projects" className="font-mono text-xs uppercase tracking-widest border border-ink rounded-full px-5 py-2 hover:bg-ink hover:text-vellum transition-all">
-              All eight ↗
-            </Link>
+            <Magnetic>
+              <Link to="/projects" data-cursor="hover" className="inline-block font-mono text-xs uppercase tracking-widest border border-ink rounded-full px-5 py-2 hover:bg-ink hover:text-vellum transition-all">
+                All eight ↗
+              </Link>
+            </Magnetic>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {PROJECTS.slice(0, 4).map((p) => (
