@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Magnetic } from "@/components/Magnetic";
 
 export function SiteNav() {
   return (
@@ -11,9 +12,11 @@ export function SiteNav() {
         <Link to="/" className="font-mono text-[10px] md:text-xs uppercase tracking-widest hover:text-clay transition-colors">Survey</Link>
         <Link to="/projects" className="font-mono text-[10px] md:text-xs uppercase tracking-widest hover:text-clay transition-colors">Archive</Link>
         <Link to="/about" className="font-mono text-[10px] md:text-xs uppercase tracking-widest hover:text-clay transition-colors">Methodology</Link>
-        <a href="mailto:henryadams0123@gmail.com" className="hidden md:inline-block px-4 py-1.5 border border-ink rounded-full font-mono text-[10px] uppercase tracking-widest hover:bg-ink hover:text-vellum transition-all">
-          Contact
-        </a>
+        <Magnetic className="hidden md:inline-block">
+          <a href="mailto:henryadams0123@gmail.com" data-cursor="hover" className="inline-block px-4 py-1.5 border border-ink rounded-full font-mono text-[10px] uppercase tracking-widest hover:bg-ink hover:text-vellum transition-all">
+            Contact
+          </a>
+        </Magnetic>
       </div>
     </nav>
   );

@@ -71,6 +71,17 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { Cursor } from "@/components/Cursor";
+import { Loader } from "@/components/Loader";
+
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <>
+      <SmoothScroll />
+      <Loader />
+      <Cursor />
+      <Outlet />
+    </>
+  );
 }
