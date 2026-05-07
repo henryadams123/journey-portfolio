@@ -3,6 +3,10 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { SiteNav, SiteFooter } from "@/components/SiteNav";
 import { JourneyStop } from "@/components/JourneyStop";
+import { HeroTopo } from "@/components/HeroTopo";
+import { JourneyMap } from "@/components/JourneyMap";
+import { Pursuits } from "@/components/Pursuits";
+import { Magnetic } from "@/components/Magnetic";
 import { STOPS, PROJECTS } from "@/lib/journey";
 
 export const Route = createFileRoute("/")({
@@ -38,9 +42,10 @@ function Index() {
       <motion.section
         ref={heroRef}
         style={{ opacity: heroFade }}
-        className="relative pt-32 md:pt-40 pb-20 px-6 md:px-12 z-10"
+        className="relative pt-32 md:pt-40 pb-20 px-6 md:px-12 z-10 overflow-hidden"
       >
-        <div className="max-w-screen-2xl mx-auto">
+        <HeroTopo />
+        <div className="max-w-screen-2xl mx-auto relative">
           <div className="flex justify-between items-end mb-12 font-mono text-[10px] uppercase tracking-widest text-clay">
             <div>Station: Primary_Relief</div>
             <div className="text-right">
