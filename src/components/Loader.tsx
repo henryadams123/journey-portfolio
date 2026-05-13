@@ -8,13 +8,14 @@ import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
  */
 export function Loader() {
   const reduce = usePrefersReducedMotion();
-  const [done, setDone] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return sessionStorage.getItem("survey-loaded") === "1";
-  });
+  // Always start "done" on the server + first client render to avoid hydration mismatch.
+  // Then in an effect, decide whether to actually show the loader.
+  const [done, setDone] = useState(true);
 
   useEffect(() => {
-    if (done) return;
+    const seen = sessionStorage.getItem("survey-loaded") === "1";
+    if (seen) return;
+    setDone(false);
     if (reduce) {
       setDone(true);
       sessionStorage.setItem("survey-loaded", "1");
