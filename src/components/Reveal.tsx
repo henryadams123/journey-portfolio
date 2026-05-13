@@ -31,9 +31,9 @@ export function Reveal({
   const ref = useRef<HTMLDivElement>(null);
   const reduce = usePrefersReducedMotion();
   const inView = useInView(ref, { once, amount });
-  const Comp = (as ?? motion.div) as ElementType;
 
   if (reduce) {
+    const Comp = (as ?? "div") as ElementType;
     return (
       <Comp ref={ref} className={className}>
         {children}
