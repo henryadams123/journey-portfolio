@@ -33,7 +33,7 @@ export function Reveal({
   const inView = useInView(ref, { once, amount });
 
   if (reduce) {
-    const Comp = (as ?? "div") as ElementType;
+    const Comp: any = as ?? "div";
     return (
       <Comp ref={ref} className={className}>
         {children}
