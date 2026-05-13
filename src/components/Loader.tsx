@@ -32,7 +32,7 @@ export function Loader() {
       clearTimeout(t);
       document.body.style.overflow = "";
     };
-  }, [done, reduce]);
+  }, [reduce]);
 
   return (
     <AnimatePresence>
